@@ -17,8 +17,10 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const SeriesLazyImport = createFileRoute('/series')()
-const ProfileLazyImport = createFileRoute('/profile')()
 const IndexLazyImport = createFileRoute('/')()
+const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const ProfileSeriesLazyImport = createFileRoute('/profile/series')()
+const ProfileMoviesLazyImport = createFileRoute('/profile/movies')()
 const MovieMovieIdLazyImport = createFileRoute('/movie/$movieId')()
 
 // Create/Update Routes
@@ -29,17 +31,33 @@ const SeriesLazyRoute = SeriesLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/series.lazy').then((d) => d.Route))
 
-const ProfileLazyRoute = ProfileLazyImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
-
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+
+const ProfileSeriesLazyRoute = ProfileSeriesLazyImport.update({
+  id: '/profile/series',
+  path: '/profile/series',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/profile/series.lazy').then((d) => d.Route),
+)
+
+const ProfileMoviesLazyRoute = ProfileMoviesLazyImport.update({
+  id: '/profile/movies',
+  path: '/profile/movies',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/profile/movies.lazy').then((d) => d.Route),
+)
 
 const MovieMovieIdLazyRoute = MovieMovieIdLazyImport.update({
   id: '/movie/$movieId',
@@ -60,13 +78,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/series': {
       id: '/series'
       path: '/series'
@@ -81,6 +92,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MovieMovieIdLazyImport
       parentRoute: typeof rootRoute
     }
+    '/profile/movies': {
+      id: '/profile/movies'
+      path: '/profile/movies'
+      fullPath: '/profile/movies'
+      preLoaderRoute: typeof ProfileMoviesLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/series': {
+      id: '/profile/series'
+      path: '/profile/series'
+      fullPath: '/profile/series'
+      preLoaderRoute: typeof ProfileSeriesLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -88,47 +120,76 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/profile': typeof ProfileLazyRoute
   '/series': typeof SeriesLazyRoute
   '/movie/$movieId': typeof MovieMovieIdLazyRoute
+  '/profile/movies': typeof ProfileMoviesLazyRoute
+  '/profile/series': typeof ProfileSeriesLazyRoute
+  '/profile': typeof ProfileIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/profile': typeof ProfileLazyRoute
   '/series': typeof SeriesLazyRoute
   '/movie/$movieId': typeof MovieMovieIdLazyRoute
+  '/profile/movies': typeof ProfileMoviesLazyRoute
+  '/profile/series': typeof ProfileSeriesLazyRoute
+  '/profile': typeof ProfileIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/profile': typeof ProfileLazyRoute
   '/series': typeof SeriesLazyRoute
   '/movie/$movieId': typeof MovieMovieIdLazyRoute
+  '/profile/movies': typeof ProfileMoviesLazyRoute
+  '/profile/series': typeof ProfileSeriesLazyRoute
+  '/profile/': typeof ProfileIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/series' | '/movie/$movieId'
+  fullPaths:
+    | '/'
+    | '/series'
+    | '/movie/$movieId'
+    | '/profile/movies'
+    | '/profile/series'
+    | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/series' | '/movie/$movieId'
-  id: '__root__' | '/' | '/profile' | '/series' | '/movie/$movieId'
+  to:
+    | '/'
+    | '/series'
+    | '/movie/$movieId'
+    | '/profile/movies'
+    | '/profile/series'
+    | '/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/series'
+    | '/movie/$movieId'
+    | '/profile/movies'
+    | '/profile/series'
+    | '/profile/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  ProfileLazyRoute: typeof ProfileLazyRoute
   SeriesLazyRoute: typeof SeriesLazyRoute
   MovieMovieIdLazyRoute: typeof MovieMovieIdLazyRoute
+  ProfileMoviesLazyRoute: typeof ProfileMoviesLazyRoute
+  ProfileSeriesLazyRoute: typeof ProfileSeriesLazyRoute
+  ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  ProfileLazyRoute: ProfileLazyRoute,
   SeriesLazyRoute: SeriesLazyRoute,
   MovieMovieIdLazyRoute: MovieMovieIdLazyRoute,
+  ProfileMoviesLazyRoute: ProfileMoviesLazyRoute,
+  ProfileSeriesLazyRoute: ProfileSeriesLazyRoute,
+  ProfileIndexLazyRoute: ProfileIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -142,22 +203,30 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/profile",
         "/series",
-        "/movie/$movieId"
+        "/movie/$movieId",
+        "/profile/movies",
+        "/profile/series",
+        "/profile/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
-    },
-    "/profile": {
-      "filePath": "profile.lazy.tsx"
     },
     "/series": {
       "filePath": "series.lazy.tsx"
     },
     "/movie/$movieId": {
       "filePath": "movie/$movieId.lazy.tsx"
+    },
+    "/profile/movies": {
+      "filePath": "profile/movies.lazy.tsx"
+    },
+    "/profile/series": {
+      "filePath": "profile/series.lazy.tsx"
+    },
+    "/profile/": {
+      "filePath": "profile/index.lazy.tsx"
     }
   }
 }

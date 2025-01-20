@@ -29,7 +29,7 @@ async function loadMovies() {
 
             const query = `
             INSERT INTO movies (title, release_date, genres, overview, runtime, poster_url, watched_at, created_at, updated_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+            VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
           `;
 
             await pool.query(query, [
