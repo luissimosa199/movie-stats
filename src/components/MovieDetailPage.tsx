@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import moviesApi from "../api/moviesApi";
-import { Movie } from "@/types";
+import { Movie, MovieButtonType } from "@/types";
+import { MovieButton } from "./MovieButton";
 
 export default function MovieDetailPage({ movieId }: { movieId: string }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -43,8 +44,14 @@ export default function MovieDetailPage({ movieId }: { movieId: string }) {
             <h1 className="text-5xl font-bold">{movie.title}</h1>
             <p className="py-6">{movie.overview}</p>
             <div className="flex gap-2 justify-end">
-              <button className="btn btn-primary">Add to list</button>
-              <button className="btn btn-primary">Watched</button>
+              <MovieButton
+                type={MovieButtonType.ADD_TO_LIST}
+                movieId={movie.id}
+              />
+              <MovieButton
+                type={MovieButtonType.WATCHED}
+                movieId={movie.id}
+              />
             </div>
           </div>
         </div>
