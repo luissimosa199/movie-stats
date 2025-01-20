@@ -5,20 +5,29 @@ import "../App.css";
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-2">
+      <div className="p-2 flex justify-between items-center">
+        <div className="flex gap-2">
+          <Link
+            to="/"
+            className="hover:underline"
+          >
+            Movies
+          </Link>
+          <Link
+            to="/series"
+            className="hover:underline"
+          >
+            Series
+          </Link>
+        </div>
         <Link
-          to="/"
-          className=""
+          to="/profile"
+          className="hover:underline"
         >
-          Movies
-        </Link>{" "}
-        <Link
-          to="/series"
-          className=""
-        >
-          Series
+          Profile
         </Link>
       </div>
+
       <hr />
       <Outlet />
       <TanStackRouterDevtools />

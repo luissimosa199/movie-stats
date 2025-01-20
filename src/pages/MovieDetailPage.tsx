@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import moviesApi from "../api/moviesApi";
 import { Movie, MovieButtonType } from "@/types";
-import { MovieButton } from "./MovieButton";
+import { MovieButton } from "../components/MovieButton";
 
 export default function MovieDetailPage({ movieId }: { movieId: string }) {
   const [movie, setMovie] = useState<Movie | null>(null);

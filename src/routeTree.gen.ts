@@ -8,113 +8,132 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
+import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const SeriesLazyImport = createFileRoute("/series")();
-const IndexLazyImport = createFileRoute("/")();
-const MovieMovieIdLazyImport = createFileRoute("/movie/$movieId")();
+const SeriesLazyImport = createFileRoute('/series')()
+const ProfileLazyImport = createFileRoute('/profile')()
+const IndexLazyImport = createFileRoute('/')()
+const MovieMovieIdLazyImport = createFileRoute('/movie/$movieId')()
 
 // Create/Update Routes
 
 const SeriesLazyRoute = SeriesLazyImport.update({
-  id: "/series",
-  path: "/series",
+  id: '/series',
+  path: '/series',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/series.lazy").then((d) => d.Route));
+} as any).lazy(() => import('./routes/series.lazy').then((d) => d.Route))
+
+const ProfileLazyRoute = ProfileLazyImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const MovieMovieIdLazyRoute = MovieMovieIdLazyImport.update({
-  id: "/movie/$movieId",
-  path: "/movie/$movieId",
+  id: '/movie/$movieId',
+  path: '/movie/$movieId',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import("./routes/movie/$movieId.lazy").then((d) => d.Route)
-);
+  import('./routes/movie/$movieId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexLazyImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/series": {
-      id: "/series";
-      path: "/series";
-      fullPath: "/series";
-      preLoaderRoute: typeof SeriesLazyImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/movie/$movieId": {
-      id: "/movie/$movieId";
-      path: "/movie/$movieId";
-      fullPath: "/movie/$movieId";
-      preLoaderRoute: typeof MovieMovieIdLazyImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/series': {
+      id: '/series'
+      path: '/series'
+      fullPath: '/series'
+      preLoaderRoute: typeof SeriesLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/movie/$movieId': {
+      id: '/movie/$movieId'
+      path: '/movie/$movieId'
+      fullPath: '/movie/$movieId'
+      preLoaderRoute: typeof MovieMovieIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexLazyRoute;
-  "/series": typeof SeriesLazyRoute;
-  "/movie/$movieId": typeof MovieMovieIdLazyRoute;
+  '/': typeof IndexLazyRoute
+  '/profile': typeof ProfileLazyRoute
+  '/series': typeof SeriesLazyRoute
+  '/movie/$movieId': typeof MovieMovieIdLazyRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexLazyRoute;
-  "/series": typeof SeriesLazyRoute;
-  "/movie/$movieId": typeof MovieMovieIdLazyRoute;
+  '/': typeof IndexLazyRoute
+  '/profile': typeof ProfileLazyRoute
+  '/series': typeof SeriesLazyRoute
+  '/movie/$movieId': typeof MovieMovieIdLazyRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexLazyRoute;
-  "/series": typeof SeriesLazyRoute;
-  "/movie/$movieId": typeof MovieMovieIdLazyRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/profile': typeof ProfileLazyRoute
+  '/series': typeof SeriesLazyRoute
+  '/movie/$movieId': typeof MovieMovieIdLazyRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/series" | "/movie/$movieId";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/series" | "/movie/$movieId";
-  id: "__root__" | "/" | "/series" | "/movie/$movieId";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/profile' | '/series' | '/movie/$movieId'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/profile' | '/series' | '/movie/$movieId'
+  id: '__root__' | '/' | '/profile' | '/series' | '/movie/$movieId'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute;
-  SeriesLazyRoute: typeof SeriesLazyRoute;
-  MovieMovieIdLazyRoute: typeof MovieMovieIdLazyRoute;
+  IndexLazyRoute: typeof IndexLazyRoute
+  ProfileLazyRoute: typeof ProfileLazyRoute
+  SeriesLazyRoute: typeof SeriesLazyRoute
+  MovieMovieIdLazyRoute: typeof MovieMovieIdLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  ProfileLazyRoute: ProfileLazyRoute,
   SeriesLazyRoute: SeriesLazyRoute,
   MovieMovieIdLazyRoute: MovieMovieIdLazyRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -123,12 +142,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/profile",
         "/series",
         "/movie/$movieId"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/profile": {
+      "filePath": "profile.lazy.tsx"
     },
     "/series": {
       "filePath": "series.lazy.tsx"
