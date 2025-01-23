@@ -1,4 +1,4 @@
-export interface Movie {
+export interface TMDBMovie {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -15,7 +15,24 @@ export interface Movie {
   vote_count: number;
 }
 
+export interface Movie {
+  id: number;
+  tmdb_id: number;
+  imdb_id: string;
+  created_at: string;
+  updated_at: string;
+  watched_at?: string | null;
+  title: string;
+  overview?: string | null;
+  release_date?: string | null;
+  runtime?: number | null;
+  genres?: string[] | null;
+  poster_url?: string | null;
+  score?: number | null;
+}
+
 export enum MovieButtonType {
   "ADD_TO_LIST",
+  "REMOVE_FROM_LIST",
   "WATCHED",
 }

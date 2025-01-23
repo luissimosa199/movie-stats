@@ -6,8 +6,20 @@ interface MovieButtonProps {
 }
 
 export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
-  const handleMovieButtonClick = () => {
-    console.log(movieId);
+  // const handleMovieButtonClick = () => {
+  //   console.log(movieId);
+  // };
+
+  const addToList = (movieId: number) => {
+    console.log("Add to list", movieId);
+  };
+
+  const removeFromList = (movieId: number) => {
+    console.log("Remove from list", movieId);
+  };
+
+  const markAsWatched = (movieId: number) => {
+    console.log("Mark as watched", movieId);
   };
 
   if (type === MovieButtonType.ADD_TO_LIST) {
@@ -15,7 +27,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
       <button
         className="btn btn-primary"
         onClick={() => {
-          handleMovieButtonClick();
+          addToList(movieId);
         }}
       >
         Add to list
@@ -26,10 +38,21 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
       <button
         className="btn btn-primary"
         onClick={() => {
-          handleMovieButtonClick();
+          markAsWatched(movieId);
         }}
       >
         Watched
+      </button>
+    );
+  } else if (type === MovieButtonType.REMOVE_FROM_LIST) {
+    return (
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          removeFromList(movieId);
+        }}
+      >
+        Remove from list
       </button>
     );
   }
