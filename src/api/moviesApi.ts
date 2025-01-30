@@ -29,6 +29,20 @@ class MoviesApi {
 
     return response.json();
   }
+
+  async search(query: string, queryParams: QueryParams = {}): Promise<any> {
+    const url = `${this.baseUrl}/search/movie${this.buildQueryString({
+      query,
+      ...queryParams,
+    })}`;
+    const response = await fetch(url, { method: "GET", headers: this.headers });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
 }
 
 const moviesApi = new MoviesApi(

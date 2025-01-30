@@ -24,7 +24,7 @@ const ExpandButton: React.FC<ExpandButtonProps> = ({
 }) => {
   return (
     <button
-      className="text-lg text-blue-500 font-bold mx-4 hover:text-blue-700 focus:outline-none"
+      className="text-lg text-blue-500 font-bold mx-auto my-2 block hover:text-blue-700 focus:outline-none"
       onClick={toggleExpand}
     >
       {isExpanded ? "See less" : "See more"}
@@ -61,7 +61,7 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
         <div className="flex flex-row gap-2 justify-between items-center">
           <div>
             <h3 className="card-title text-lg font-semibold">
-              {movie.title || "Untitled"}
+              {movie.title || "Untitled"} ({movie.release_date?.slice(0, 4)})
             </h3>
             <span className="text-sm text-gray-500">
               {isFromList && `Watched: ${movie.watched_at}`}
@@ -122,7 +122,7 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
             />
           </div>
         )}
-        <div className="card-actions justify-end mt-8">
+        <div className="card-actions justify-end mt-4">
           <MovieButton
             type={
               isFromList
