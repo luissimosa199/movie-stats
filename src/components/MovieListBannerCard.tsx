@@ -24,7 +24,7 @@ const ExpandButton: React.FC<ExpandButtonProps> = ({
 }) => {
   return (
     <button
-      className="text-sm text-blue-500 hover:text-blue-700 focus:outline-none"
+      className="text-lg text-blue-500 font-bold mx-4 hover:text-blue-700 focus:outline-none"
       onClick={toggleExpand}
     >
       {isExpanded ? "See less" : "See more"}
@@ -80,7 +80,7 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
               movie.vote_average !== undefined &&
               movie.vote_average !== null && (
                 <p className="text-sm font-medium">
-                  {movie.vote_average}
+                  {movie.vote_average.toFixed(1)}
                   {rankBase && `/${rankBase}`}
                 </p>
               )}
@@ -92,7 +92,7 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
           </div>
         </div>
         <div className="mt-2">
-          <p className="text-sm text-gray-700">
+          <p className="text-sm dark:text-gray-200 text-gray-600">
             {expandOverview ? (
               <>
                 {movie.overview || "No overview available."}{" "}
@@ -122,7 +122,7 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
             />
           </div>
         )}
-        <div className="card-actions justify-end mt-4">
+        <div className="card-actions justify-end mt-8">
           <MovieButton
             type={
               isFromList
