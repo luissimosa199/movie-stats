@@ -17,7 +17,6 @@ function RouteComponent() {
       try {
         setLoading(true);
         const moviesData = await serverApi.getMovies();
-        console.log("Movies", moviesData);
         setMovies(moviesData);
       } catch (err) {
         setError(

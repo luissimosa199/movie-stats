@@ -40,12 +40,12 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
   const toggleExpand = () => setExpandOverview(!expandOverview);
 
   return (
-    <div className="card card-compact bg-base-100 shadow-xl w-full md:w-80">
+    <div className="card card-compact bg-base-100 shadow-xl w-full md:w-80 mb-4">
       <Link
         to={"/movie/" + movie.id}
         className="block"
       >
-        <div className="relative w-full pb-[150%] md:pb-[66.66%] lg:pb-[56.25%] overflow-hidden rounded-md">
+        <div className="relative w-full pb-[150%] md:pb-[66.66%] lg:pb-[56.25%] overflow-hidden rounded-2xl">
           <img
             src={
               movie.poster_path

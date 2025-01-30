@@ -22,7 +22,6 @@ export const MovieListBanner: React.FC<MovieListBannerProps> = ({
     const fetchMovies = async () => {
       try {
         const data = await moviesApi.movie(route, { page: 1 });
-        console.log("data", data);
         setMovies(data.results as UnifiedMovie[]);
       } catch (err: any) {
         setError(err.message || "An error occurred");

@@ -1,37 +1,79 @@
 // MovieButton.tsx
-import moviesApi from "@/api/moviesApi";
-import serverApi from "@/api/serverApi";
 import { MovieButtonType, UnifiedMovie } from "@/types";
+import { Suspense, useState, useEffect } from "react";
+import serverApi from "@/api/serverApi";
 
 interface MovieButtonProps {
   type: MovieButtonType;
   movie: UnifiedMovie;
 }
 
-export const MovieButton: React.FC<MovieButtonProps> = ({ type, movie }) => {
-  const addToList = async (movie: UnifiedMovie) => {
-    const movieDetails = await moviesApi.getMovieDetails(movie.id);
-    serverApi.addMovie({ movie, ...movieDetails });
-    console.log("Add to list", movie.id);
+const MovieButtonComponent: React.FC<MovieButtonProps> = ({ type, movie }) => {
+  const [isInList, setIsInList] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchInitialState = async () => {
+      if (
+        type === MovieButtonType.ADD_TO_LIST ||
+        type === MovieButtonType.REMOVE_FROM_LIST
+      ) {
+        setLoading(true);
+        try {
+          const result = await serverApi.checkMovieInList(movie.id);
+          setIsInList(result);
+        } catch (error) {
+          console.error("Failed to fetch initial state:", error);
+          setIsInList(false);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialState();
+  }, [movie.id]);
+
+  const handleAddToList = async (movieId: number) => {
+    console.log("Add to list", movieId);
+    setIsInList(true);
   };
 
-  const removeFromList = (movie: UnifiedMovie) => {
-    console.log("Remove from list", movie.id);
+  const handleRemoveFromList = async (movieId: number) => {
+    console.log("Remove from list", movieId);
+    setIsInList(false);
   };
 
-  const markAsWatched = (movie: UnifiedMovie) => {
-    console.log("Mark as watched", movie.id);
+  const markAsWatched = (movieId: number) => {
+    console.log("Mark as watched", movieId);
   };
+
+  if (loading) {
+    return (
+      <button
+        className="btn btn-sm btn-primary"
+        disabled
+      >
+        Loading...
+      </button>
+    );
+  }
 
   if (type === MovieButtonType.ADD_TO_LIST) {
     return (
       <button
         className="btn btn-sm btn-primary"
         onClick={() => {
-          addToList(movie);
+          handleAddToList(movie.id);
         }}
       >
-        Add to list
+        {isInList === null
+          ? "Add to list"
+          : isInList
+            ? "Remove from list"
+            : "Add to list"}
       </button>
     );
   } else if (type === MovieButtonType.WATCHED) {
@@ -39,7 +81,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movie }) => {
       <button
         className="btn btn-sm btn-outline btn-primary"
         onClick={() => {
-          markAsWatched(movie);
+          markAsWatched(movie.id);
         }}
       >
         Watched
@@ -50,11 +92,19 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movie }) => {
       <button
         className="btn btn-sm btn-error"
         onClick={() => {
-          removeFromList(movie);
+          handleRemoveFromList(movie.id);
         }}
       >
-        Remove
+        {isInList === null ? "Remove" : isInList ? "Remove" : "Removed"}
       </button>
     );
   }
+};
+
+export const MovieButton: React.FC<MovieButtonProps> = (props) => {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <MovieButtonComponent {...props} />
+    </Suspense>
+  );
 };

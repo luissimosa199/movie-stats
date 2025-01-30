@@ -106,6 +106,26 @@ class ServerApi {
 
     return response.json();
   }
+
+  // Check if a movie is in the list
+  async checkMovieInList(movieId: number): Promise<boolean> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/movie/check-movie-in-list?movieId=${movieId}`,
+        { headers: this.headers }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.isInList;
+    } catch (err) {
+      console.error("error", err);
+      throw new Error("Failed to check movie in list");
+    }
+  }
+
+  //
 }
 
 const serverApi = new ServerApi(

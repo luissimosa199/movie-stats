@@ -21,7 +21,9 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <div className="bg-slate-100 dark:bg-slate-900">
+        <RouterProvider router={router} />
+      </div>
     </StrictMode>
   );
 }

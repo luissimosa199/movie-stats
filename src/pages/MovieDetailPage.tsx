@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import moviesApi from "../api/moviesApi";
-import { TMDBMovie, MovieButtonType } from "@/types";
+import { UnifiedMovie, MovieButtonType } from "@/types";
 import { MovieButton } from "../components/MovieButton";
 
 export default function MovieDetailPage({ movieId }: { movieId: string }) {
-  const [movie, setMovie] = useState<TMDBMovie | null>(null);
+  const [movie, setMovie] = useState<UnifiedMovie | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,7 +12,6 @@ export default function MovieDetailPage({ movieId }: { movieId: string }) {
     const fetchMovies = async () => {
       try {
         const data = await moviesApi.movie(movieId);
-        console.log("MovieDetailPage", data);
         setMovie(data);
       } catch (err: any) {
         setError(err.message || "An error occurred");
@@ -46,11 +45,11 @@ export default function MovieDetailPage({ movieId }: { movieId: string }) {
             <div className="flex gap-2 justify-end">
               <MovieButton
                 type={MovieButtonType.ADD_TO_LIST}
-                movieId={movie.id}
+                movie={movie}
               />
               <MovieButton
                 type={MovieButtonType.WATCHED}
-                movieId={movie.id}
+                movie={movie}
               />
             </div>
           </div>
