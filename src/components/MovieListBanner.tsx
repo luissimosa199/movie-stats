@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import moviesApi from "../api/moviesApi";
 import MovieListBannerCard from "./MovieListBannerCard";
-import { Movie } from "@/types";
+import { TMDBMovie, Movie } from "@/types";
+
+type UnifiedMovie = TMDBMovie & Partial<Movie>;
 
 interface MovieListBannerProps {
   title: string;
@@ -12,7 +14,7 @@ export const MovieListBanner: React.FC<MovieListBannerProps> = ({
   route,
   title,
 }) => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<UnifiedMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -21,7 +23,7 @@ export const MovieListBanner: React.FC<MovieListBannerProps> = ({
       try {
         const data = await moviesApi.movie(route, { page: 1 });
         console.log("data", data);
-        setMovies(data.results);
+        setMovies(data.results as UnifiedMovie[]);
       } catch (err: any) {
         setError(err.message || "An error occurred");
       } finally {
@@ -30,7 +32,7 @@ export const MovieListBanner: React.FC<MovieListBannerProps> = ({
     };
 
     fetchMovies();
-  }, []);
+  }, [route]);
 
   if (loading) {
     return <div className="p-2">Loading...</div>;
@@ -42,18 +44,15 @@ export const MovieListBanner: React.FC<MovieListBannerProps> = ({
 
   return (
     <div className="p-2">
-      <div>
-        <h2>{title}</h2>
-        <ul>
-          {movies.map((movie) => (
-            <MovieListBannerCard
-              key={movie.id}
-              movie={movie}
-            />
-          ))}
-        </ul>
+      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+      <div className="flex flex-wrap gap-4">
+        {movies.map((movie) => (
+          <MovieListBannerCard
+            key={movie.id}
+            movie={movie}
+          />
+        ))}
       </div>
-      <div></div>
     </div>
   );
 };

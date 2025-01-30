@@ -1,3 +1,4 @@
+// MovieListBannerCard.tsx
 import { TMDBMovie, Movie, MovieButtonType } from "@/types";
 import { Link } from "@tanstack/react-router";
 import React, { useState } from "react";
@@ -9,7 +10,7 @@ type UnifiedMovie = TMDBMovie & Partial<Movie>;
 
 interface MovieCardProps {
   movie: UnifiedMovie;
-  rankBase: 5 | 10;
+  rankBase?: 5 | 10;
 }
 
 interface ExpandButtonProps {
@@ -22,7 +23,10 @@ const ExpandButton: React.FC<ExpandButtonProps> = ({
   toggleExpand,
 }) => {
   return (
-    <button onClick={toggleExpand}>
+    <button
+      className="text-sm text-blue-500 hover:text-blue-700 focus:outline-none"
+      onClick={toggleExpand}
+    >
       {isExpanded ? "See less" : "See more"}
     </button>
   );
@@ -39,94 +43,98 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
   const toggleExpand = () => setExpandOverview(!expandOverview);
 
   return (
-    <div className="my-4">
-      <div className="card card-side bg-base-100 shadow-xl">
-        <Link to={"/movie/" + movie.id}>
-          <figure>
-            <img
-              src={
-                movie.poster_path
-                  ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
-                  : movie.poster_url || "https://via.placeholder.com/200"
-              }
-              alt={movie.title || "Untitled"}
-            />
-          </figure>
-        </Link>
-        <div className="card-body">
-          <div className="flex flex-row gap-2 justify-between">
-            <div>
-              <h3 className="card-title">{movie.title || "Untitled"}</h3>
-              <span>{isFromList && `Watched: ${movie.watched_at}`}</span>
-            </div>
-            <div className="flex flex-row justify-center items-center gap-2">
-              {isFromList &&
-                movie.score !== undefined &&
-                movie.score !== null && (
-                  <p>
-                    {movie.score}
-                    {rankBase && `/${rankBase}`}
-                  </p>
-                )}
-              {!isFromList &&
-                movie.vote_average !== undefined &&
-                movie.vote_average !== null && (
-                  <p>
-                    {movie.vote_average}
-                    {rankBase && `/${rankBase}`}
-                  </p>
-                )}
-              {isFromList &&
-                movie.vote_count !== undefined &&
-                movie.vote_count !== null && <p>({movie.vote_count})</p>}
-            </div>
-          </div>
-
+    <div className="card card-compact bg-base-100 shadow-xl w-full md:w-80">
+      <Link to={"/movie/" + movie.id}>
+        <figure>
+          <img
+            src={
+              movie.poster_path
+                ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                : movie.poster_url || "https://via.placeholder.com/200"
+            }
+            alt={movie.title || "Untitled"}
+            className="w-full h-60 object-cover"
+          />
+        </figure>
+      </Link>
+      <div className="card-body">
+        <div className="flex flex-row gap-2 justify-between items-center">
           <div>
-            <p className="text-sm">
-              {expandOverview ? (
-                <>
-                  {movie.overview || "No overview available."}{" "}
-                  <ExpandButton
-                    isExpanded={expandOverview}
-                    toggleExpand={toggleExpand}
-                  />
-                </>
-              ) : (
-                <>
-                  {movie.overview
-                    ? `${movie.overview.slice(0, 140)}... `
-                    : "No overview available."}
-                  <ExpandButton
-                    isExpanded={expandOverview}
-                    toggleExpand={toggleExpand}
-                  />
-                </>
+            <h3 className="card-title text-lg font-semibold">
+              {movie.title || "Untitled"}
+            </h3>
+            <span className="text-sm text-gray-500">
+              {isFromList && `Watched: ${movie.watched_at}`}
+            </span>
+          </div>
+          <div className="flex flex-row justify-center items-center gap-2">
+            {isFromList &&
+              movie.score !== undefined &&
+              movie.score !== null && (
+                <p className="text-sm font-medium">
+                  {movie.score}
+                  {rankBase && `/${rankBase}`}
+                </p>
               )}
-            </p>
+            {!isFromList &&
+              movie.vote_average !== undefined &&
+              movie.vote_average !== null && (
+                <p className="text-sm font-medium">
+                  {movie.vote_average}
+                  {rankBase && `/${rankBase}`}
+                </p>
+              )}
+            {isFromList &&
+              movie.vote_count !== undefined &&
+              movie.vote_count !== null && (
+                <p className="text-sm text-gray-500">({movie.vote_count})</p>
+              )}
           </div>
-          {isFromList && (
-            <div>
-              <StarRating
-                movieId={movie.id}
-                score={movie.score || 0}
-              />
-            </div>
-          )}
-          <div className="card-actions justify-end">
-            <MovieButton
-              type={
-                isFromList
-                  ? MovieButtonType.REMOVE_FROM_LIST
-                  : MovieButtonType.ADD_TO_LIST
-              }
+        </div>
+        <div className="mt-2">
+          <p className="text-sm text-gray-700">
+            {expandOverview ? (
+              <>
+                {movie.overview || "No overview available."}{" "}
+                <ExpandButton
+                  isExpanded={expandOverview}
+                  toggleExpand={toggleExpand}
+                />
+              </>
+            ) : (
+              <>
+                {movie.overview
+                  ? `${movie.overview.slice(0, 140)}... `
+                  : "No overview available."}
+                <ExpandButton
+                  isExpanded={expandOverview}
+                  toggleExpand={toggleExpand}
+                />
+              </>
+            )}
+          </p>
+        </div>
+        {isFromList && (
+          <div className="mt-2">
+            <StarRating
               movieId={movie.id}
-            />
-            <MovieButton
-              type={MovieButtonType.WATCHED}
-              movieId={movie.id}
+              score={movie.score || 0}
             />
           </div>
+        )}
+        <div className="card-actions justify-end mt-4">
+          <MovieButton
+            type={
+              isFromList
+                ? MovieButtonType.REMOVE_FROM_LIST
+                : MovieButtonType.ADD_TO_LIST
+            }
+            movieId={movie.id}
+          />
+          <MovieButton
+            type={MovieButtonType.WATCHED}
+            movieId={movie.id}
+          />
         </div>
       </div>
     </div>

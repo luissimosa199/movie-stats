@@ -1,3 +1,4 @@
+// StarRating.tsx
 import serverApi from "@/api/serverApi";
 import React from "react";
 
@@ -34,7 +35,7 @@ const StarRating: React.FC<StarRatingProps> = ({ score, movieId }) => {
           <div
             key={index}
             onClick={() => handleStarClick(index)}
-            className={`w-6 h-6 cursor-pointer transition-colors duration-200 
+            className={`w-5 h-5 cursor-pointer transition-colors duration-200 
               ${isFilled ? "text-yellow-500" : "text-gray-300"} 
               hover:text-yellow-300`} // Lighter yellow on hover
           >

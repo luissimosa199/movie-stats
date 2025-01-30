@@ -1,3 +1,4 @@
+// MovieButton.tsx
 import { MovieButtonType } from "@/types";
 
 interface MovieButtonProps {
@@ -25,7 +26,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
   if (type === MovieButtonType.ADD_TO_LIST) {
     return (
       <button
-        className="btn btn-primary"
+        className="btn btn-sm btn-primary"
         onClick={() => {
           addToList(movieId);
         }}
@@ -36,7 +37,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
   } else if (type === MovieButtonType.WATCHED) {
     return (
       <button
-        className="btn btn-primary"
+        className="btn btn-sm btn-outline btn-primary"
         onClick={() => {
           markAsWatched(movieId);
         }}
@@ -47,12 +48,12 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
   } else if (type === MovieButtonType.REMOVE_FROM_LIST) {
     return (
       <button
-        className="btn btn-primary"
+        className="btn btn-sm btn-error"
         onClick={() => {
           removeFromList(movieId);
         }}
       >
-        Remove from list
+        Remove
       </button>
     );
   }
