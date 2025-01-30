@@ -36,3 +36,5 @@ export enum MovieButtonType {
   "REMOVE_FROM_LIST",
   "WATCHED",
 }
+
+export type UnifiedMovie = TMDBMovie & Partial<Movie>;

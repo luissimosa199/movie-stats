@@ -43,6 +43,10 @@ class MoviesApi {
 
     return response.json();
   }
+
+  async getMovieDetails(id: number): Promise<any> {
+    return await this.movie(`${id}`);
+  }
 }
 
 const moviesApi = new MoviesApi(

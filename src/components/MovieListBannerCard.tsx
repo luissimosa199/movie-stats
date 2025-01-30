@@ -1,12 +1,9 @@
 // MovieListBannerCard.tsx
-import { TMDBMovie, Movie, MovieButtonType } from "@/types";
+import { UnifiedMovie, MovieButtonType } from "@/types";
 import { Link } from "@tanstack/react-router";
 import React, { useState } from "react";
 import { MovieButton } from "./MovieButton";
 import StarRating from "./StarRating";
-
-// Unified movie type combining TMDBMovie and Movie
-type UnifiedMovie = TMDBMovie & Partial<Movie>;
 
 interface MovieCardProps {
   movie: UnifiedMovie;
@@ -44,18 +41,21 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
 
   return (
     <div className="card card-compact bg-base-100 shadow-xl w-full md:w-80">
-      <Link to={"/movie/" + movie.id}>
-        <figure>
+      <Link
+        to={"/movie/" + movie.id}
+        className="block"
+      >
+        <div className="relative w-full pb-[150%] md:pb-[66.66%] lg:pb-[56.25%] overflow-hidden rounded-md">
           <img
             src={
               movie.poster_path
-                ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+                ? `https://image.tmdb.org/t/p/w780${movie.poster_path}` // changed to w780
                 : movie.poster_url || "https://via.placeholder.com/200"
             }
             alt={movie.title || "Untitled"}
-            className="w-full h-60 object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
-        </figure>
+        </div>
       </Link>
       <div className="card-body">
         <div className="flex flex-row gap-2 justify-between items-center">
@@ -129,11 +129,11 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
                 ? MovieButtonType.REMOVE_FROM_LIST
                 : MovieButtonType.ADD_TO_LIST
             }
-            movieId={movie.id}
+            movie={movie}
           />
           <MovieButton
             type={MovieButtonType.WATCHED}
-            movieId={movie.id}
+            movie={movie}
           />
         </div>
       </div>

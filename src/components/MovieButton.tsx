@@ -1,26 +1,26 @@
 // MovieButton.tsx
-import { MovieButtonType } from "@/types";
+import moviesApi from "@/api/moviesApi";
+import serverApi from "@/api/serverApi";
+import { MovieButtonType, UnifiedMovie } from "@/types";
 
 interface MovieButtonProps {
   type: MovieButtonType;
-  movieId: number;
+  movie: UnifiedMovie;
 }
 
-export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
-  // const handleMovieButtonClick = () => {
-  //   console.log(movieId);
-  // };
-
-  const addToList = (movieId: number) => {
-    console.log("Add to list", movieId);
+export const MovieButton: React.FC<MovieButtonProps> = ({ type, movie }) => {
+  const addToList = async (movie: UnifiedMovie) => {
+    const movieDetails = await moviesApi.getMovieDetails(movie.id);
+    serverApi.addMovie({ movie, ...movieDetails });
+    console.log("Add to list", movie.id);
   };
 
-  const removeFromList = (movieId: number) => {
-    console.log("Remove from list", movieId);
+  const removeFromList = (movie: UnifiedMovie) => {
+    console.log("Remove from list", movie.id);
   };
 
-  const markAsWatched = (movieId: number) => {
-    console.log("Mark as watched", movieId);
+  const markAsWatched = (movie: UnifiedMovie) => {
+    console.log("Mark as watched", movie.id);
   };
 
   if (type === MovieButtonType.ADD_TO_LIST) {
@@ -28,7 +28,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
       <button
         className="btn btn-sm btn-primary"
         onClick={() => {
-          addToList(movieId);
+          addToList(movie);
         }}
       >
         Add to list
@@ -39,7 +39,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
       <button
         className="btn btn-sm btn-outline btn-primary"
         onClick={() => {
-          markAsWatched(movieId);
+          markAsWatched(movie);
         }}
       >
         Watched
@@ -50,7 +50,7 @@ export const MovieButton: React.FC<MovieButtonProps> = ({ type, movieId }) => {
       <button
         className="btn btn-sm btn-error"
         onClick={() => {
-          removeFromList(movieId);
+          removeFromList(movie);
         }}
       >
         Remove
