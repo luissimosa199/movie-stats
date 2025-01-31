@@ -8,10 +8,13 @@ export default function MovieDetailPage({ movieId }: { movieId: string }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const isFromList = false;
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const data = await moviesApi.movie(movieId);
+        // TODO: Verify if the movie is in list
         setMovie(data);
       } catch (err: any) {
         setError(err.message || "An error occurred");
@@ -46,10 +49,12 @@ export default function MovieDetailPage({ movieId }: { movieId: string }) {
               <MovieButton
                 type={MovieButtonType.ADD_TO_LIST}
                 movie={movie}
+                isInList={isFromList}
               />
               <MovieButton
                 type={MovieButtonType.WATCHED}
                 movie={movie}
+                isInList={isFromList}
               />
             </div>
           </div>

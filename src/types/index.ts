@@ -37,4 +37,9 @@ export enum MovieButtonType {
   "WATCHED",
 }
 
+export interface MovieHistoryDetails {
+  isInList: boolean;
+  watched_at: string | null;
+}
+
 export type UnifiedMovie = TMDBMovie & Partial<Movie>;

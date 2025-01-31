@@ -1,3 +1,5 @@
+import { MovieHistoryDetails } from "@/types";
+
 type QueryParams = Record<string, string | number>;
 
 class ServerApi {
@@ -108,17 +110,17 @@ class ServerApi {
   }
 
   // Check if a movie is in the list
-  async checkMovieInList(movieId: number): Promise<boolean> {
+  async getMovieHistoryDetail(movieId: number): Promise<MovieHistoryDetails> {
     try {
       const response = await fetch(
-        `${this.baseUrl}/movie/check-movie-in-list?movieId=${movieId}`,
+        `${this.baseUrl}/movie/check-movie-history-detail?movieId=${movieId}`,
         { headers: this.headers }
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      return data.isInList;
+      return data;
     } catch (err) {
       console.error("error", err);
       throw new Error("Failed to check movie in list");

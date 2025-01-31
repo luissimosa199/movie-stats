@@ -57,15 +57,12 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
           />
         </div>
       </Link>
-      <div className="card-body">
+      <div className="card-body justify-between">
         <div className="flex flex-row gap-2 justify-between items-center">
           <div>
             <h3 className="card-title text-lg font-semibold">
               {movie.title || "Untitled"} ({movie.release_date?.slice(0, 4)})
             </h3>
-            <span className="text-sm text-gray-500">
-              {isFromList && `Watched: ${movie.watched_at}`}
-            </span>
           </div>
           <div className="flex flex-row justify-center items-center gap-2">
             {isFromList &&
@@ -130,11 +127,19 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
                 : MovieButtonType.ADD_TO_LIST
             }
             movie={movie}
+            isInList={isFromList}
           />
-          <MovieButton
-            type={MovieButtonType.WATCHED}
-            movie={movie}
-          />
+          {isFromList && movie.watched_at ? (
+            <div className="btn btn-sm btn-outline btn-primary disabled:text-slate-500">
+              Watched on {new Date(movie.watched_at).toLocaleDateString()}
+            </div>
+          ) : (
+            <MovieButton
+              type={MovieButtonType.WATCHED}
+              movie={movie}
+              isInList={isFromList}
+            />
+          )}
         </div>
       </div>
     </div>

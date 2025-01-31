@@ -1,30 +1,41 @@
 // MovieButton.tsx
-import { MovieButtonType, UnifiedMovie } from "@/types";
+import { MovieButtonType, UnifiedMovie, MovieHistoryDetails } from "@/types";
 import { Suspense, useState, useEffect } from "react";
 import serverApi from "@/api/serverApi";
 
 interface MovieButtonProps {
   type: MovieButtonType;
   movie: UnifiedMovie;
+  isInList: boolean;
 }
 
-const MovieButtonComponent: React.FC<MovieButtonProps> = ({ type, movie }) => {
-  const [isInList, setIsInList] = useState<boolean | null>(null);
+const MovieButtonComponent: React.FC<MovieButtonProps> = ({
+  type,
+  movie,
+  isInList,
+}) => {
+  const [movieHistoryDetails, setMovieHistoryDetails] =
+    useState<MovieHistoryDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchInitialState = async () => {
       if (
         type === MovieButtonType.ADD_TO_LIST ||
-        type === MovieButtonType.REMOVE_FROM_LIST
+        type === MovieButtonType.REMOVE_FROM_LIST ||
+        type === MovieButtonType.WATCHED
       ) {
         setLoading(true);
         try {
-          const result = await serverApi.checkMovieInList(movie.id);
-          setIsInList(result);
+          const id = isInList ? movie.tmdb_id : movie.id;
+
+          if (id) {
+            const result = await serverApi.getMovieHistoryDetail(id);
+            setMovieHistoryDetails(result);
+          }
         } catch (error) {
           console.error("Failed to fetch initial state:", error);
-          setIsInList(false);
+          setMovieHistoryDetails(null);
         } finally {
           setLoading(false);
         }
@@ -34,20 +45,30 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({ type, movie }) => {
     };
 
     fetchInitialState();
-  }, [movie.id]);
+  }, [movie.id, type]);
 
   const handleAddToList = async (movieId: number) => {
     console.log("Add to list", movieId);
-    setIsInList(true);
+    if (movieHistoryDetails) {
+      setMovieHistoryDetails({ ...movieHistoryDetails, isInList: true });
+    }
   };
 
   const handleRemoveFromList = async (movieId: number) => {
     console.log("Remove from list", movieId);
-    setIsInList(false);
+    if (movieHistoryDetails) {
+      setMovieHistoryDetails({ ...movieHistoryDetails, isInList: false });
+    }
   };
 
-  const markAsWatched = (movieId: number) => {
+  const markAsWatched = async (movieId: number) => {
     console.log("Mark as watched", movieId);
+    if (movieHistoryDetails) {
+      setMovieHistoryDetails({
+        ...movieHistoryDetails,
+        watched_at: new Date().toISOString(),
+      });
+    }
   };
 
   if (loading) {
@@ -69,9 +90,9 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({ type, movie }) => {
           handleAddToList(movie.id);
         }}
       >
-        {isInList === null
+        {movieHistoryDetails?.isInList === null
           ? "Add to list"
-          : isInList
+          : movieHistoryDetails?.isInList
             ? "Remove from list"
             : "Add to list"}
       </button>
@@ -79,12 +100,15 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({ type, movie }) => {
   } else if (type === MovieButtonType.WATCHED) {
     return (
       <button
-        className="btn btn-sm btn-outline btn-primary"
+        className="btn btn-sm btn-outline btn-primary disabled:text-slate-500"
+        disabled={!!movieHistoryDetails?.watched_at}
         onClick={() => {
           markAsWatched(movie.id);
         }}
       >
-        Watched
+        {movieHistoryDetails?.watched_at
+          ? `Watched on ${new Date(movieHistoryDetails.watched_at).toLocaleDateString()}`
+          : "Watched"}
       </button>
     );
   } else if (type === MovieButtonType.REMOVE_FROM_LIST) {
@@ -95,7 +119,11 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({ type, movie }) => {
           handleRemoveFromList(movie.id);
         }}
       >
-        {isInList === null ? "Remove" : isInList ? "Remove" : "Removed"}
+        {movieHistoryDetails?.isInList === null
+          ? "Remove"
+          : movieHistoryDetails?.isInList
+            ? "Removed"
+            : "Remove"}
       </button>
     );
   }
