@@ -29,6 +29,7 @@ export interface Movie {
   genres?: string[] | null;
   poster_url?: string | null;
   score?: number | null;
+  isInList: boolean;
 }
 
 export enum MovieButtonType {

@@ -35,7 +35,7 @@ const MovieListBannerCard: React.FC<MovieCardProps> = ({
 }) => {
   const [expandOverview, setExpandOverview] = useState<boolean>(false);
 
-  const isFromList = rankBase !== 10;
+  const isFromList = movie.isInList || rankBase !== 10;
 
   const toggleExpand = () => setExpandOverview(!expandOverview);
 

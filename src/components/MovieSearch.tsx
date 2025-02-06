@@ -53,7 +53,7 @@ const MovieSearch: React.FC<MovieSearchProps> = ({ setResults }) => {
   };
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 w-1/2 mx-auto">
       <div className="form-control">
         <input
           type="text"

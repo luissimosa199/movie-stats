@@ -27,11 +27,14 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
       ) {
         setLoading(true);
         try {
-          const id = isInList ? movie.tmdb_id : movie.id;
-
-          if (id) {
-            const result = await serverApi.getMovieHistoryDetail(id);
+          if (!isInList) {
+            const result = await serverApi.getMovieHistoryDetail(movie.id);
             setMovieHistoryDetails(result);
+          } else {
+            setMovieHistoryDetails({
+              isInList: true,
+              watched_at: movie.watched_at || null,
+            });
           }
         } catch (error) {
           console.error("Failed to fetch initial state:", error);
@@ -45,7 +48,7 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
     };
 
     fetchInitialState();
-  }, [movie.id, type]);
+  }, []);
 
   const handleAddToList = async (movieId: number) => {
     console.log("Add to list", movieId);
@@ -70,6 +73,8 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
       });
     }
   };
+
+  console.log("movie", movie);
 
   if (loading) {
     return (
@@ -119,11 +124,7 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
           handleRemoveFromList(movie.id);
         }}
       >
-        {movieHistoryDetails?.isInList === null
-          ? "Remove"
-          : movieHistoryDetails?.isInList
-            ? "Removed"
-            : "Remove"}
+        {movieHistoryDetails?.isInList ? "Remove" : "Add to list"}
       </button>
     );
   }

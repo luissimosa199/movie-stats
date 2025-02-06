@@ -43,8 +43,8 @@ export const MovieListBanner: React.FC<MovieListBannerProps> = ({
 
   return (
     <div className="p-2">
-      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
-      <div className="flex flex-wrap gap-4">
+      <h2 className="text-2xl font-semibold mb-4 ml-20">{title}</h2>
+      <div className="flex flex-wrap gap-4 justify-center">
         {movies.map((movie) => (
           <MovieListBannerCard
             key={movie.id}

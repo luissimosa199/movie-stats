@@ -8,7 +8,7 @@ export const Route = createLazyFileRoute("/profile/movies")({
 });
 
 function RouteComponent() {
-  const [movies, setMovies] = useState<any[]>([]);
+  const [movies, setMovies] = useState<any[]>([]); // TODO: Fix type
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -31,7 +31,7 @@ function RouteComponent() {
   }, []);
 
   if (loading) {
-    return <div>Loading movies...</div>;
+    return <div className="h-screen">Loading movies...</div>;
   }
 
   if (error) {
@@ -41,9 +41,9 @@ function RouteComponent() {
   return (
     <div>
       <div className="p-2">
-        <div>
-          <h2>My Movie List</h2>
-          <ul>
+        <div className="p-2">
+          <h1 className="text-3xl font-bold mb-6 text-center">Movies</h1>
+          <div className="flex flex-wrap gap-4 justify-center">
             {movies.map((movie) => (
               <MovieListBannerCard
                 key={movie.id}
@@ -51,9 +51,8 @@ function RouteComponent() {
                 rankBase={5}
               />
             ))}
-          </ul>
+          </div>
         </div>
-        <div></div>
       </div>
     </div>
   );
