@@ -48,7 +48,6 @@ class ServerApi {
 
   // POST a new movie
   async addMovie(movie: Record<string, any>): Promise<any> {
-    console.log(movie);
     const url = `${this.baseUrl}/movies`;
     const response = await fetch(url, {
       method: "POST",

@@ -16,9 +16,7 @@ const StarRating: React.FC<StarRatingProps> = ({ score, movieId }) => {
 
     try {
       // Send the updated score to the server
-      console.log("score", newScore);
       await serverApi.setNewScore(movieId, newScore);
-      console.log("New score sent to server:", newScore);
     } catch (error) {
       // If there's an error, revert to the previous score
       console.error("Failed to update score:", error);

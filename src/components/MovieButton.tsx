@@ -69,9 +69,7 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
     const watched_at = new Date().toISOString()
 
     const response = await serverApi.updateMovie(movie.id, {...movie, watched_at})
-
-    console.log("response", response)
-
+   // TODO: Handle the response
     if (movieHistoryDetails) {
       setMovieHistoryDetails({
         ...movieHistoryDetails,
@@ -80,7 +78,6 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
     }
   };
 
-  console.log("movie", movie);
 
   if (loading) {
     return (
