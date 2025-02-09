@@ -20,7 +20,7 @@ function Index() {
       <h1 className="text-3xl font-bold mb-6 text-center">Movies</h1>
       <MovieSearch setResults={setSearchResults} />
       {searchResults.length > 0 && (
-        <div className="flex flex-wrap gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6 justify-center">
           {searchResults.map((movie) => (
             <MovieListBannerCard
               key={movie.id}
