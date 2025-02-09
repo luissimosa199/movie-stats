@@ -126,8 +126,6 @@ class ServerApi {
       throw new Error("Failed to check movie in list");
     }
   }
-
-  //
 }
 
 const serverApi = new ServerApi(

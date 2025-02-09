@@ -64,12 +64,18 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
     }
   };
 
-  const markAsWatched = async (movieId: number) => {
-    console.log("Mark as watched", movieId);
+  const markAsWatched = async (movie: UnifiedMovie) => {
+    console.log("Mark as watched", movie);
+    const watched_at = new Date().toISOString()
+
+    const response = await serverApi.updateMovie(movie.id, {...movie, watched_at})
+
+    console.log("response", response)
+
     if (movieHistoryDetails) {
       setMovieHistoryDetails({
         ...movieHistoryDetails,
-        watched_at: new Date().toISOString(),
+        watched_at: watched_at,
       });
     }
   };
@@ -108,7 +114,7 @@ const MovieButtonComponent: React.FC<MovieButtonProps> = ({
         className="btn btn-sm btn-outline btn-primary disabled:text-slate-500"
         disabled={!!movieHistoryDetails?.watched_at}
         onClick={() => {
-          markAsWatched(movie.id);
+          markAsWatched(movie);
         }}
       >
         {movieHistoryDetails?.watched_at
